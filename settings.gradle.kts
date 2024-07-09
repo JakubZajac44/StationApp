@@ -23,3 +23,4 @@ rootProject.name = "StationApp"
 include(":app")
 include(":common:network")
 include(":feature:stations")
+include(":common:resource")

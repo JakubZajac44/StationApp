@@ -1,13 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-//    alias(libs.plugins.kotlin.kapt)
-    id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
 }
 
 android {
-    namespace = "com.jakub.zajac.station.network"
+    namespace = "com.jakub.zajac.station.resource"
     compileSdk = 34
 
     defaultConfig {
@@ -44,12 +41,5 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    // Hilt
-    implementation(libs.hilt)
-    kapt(libs.hilt.android.compiler)
-//    kapt(libs.hiltCompiler)
-
-    implementation(libs.logging.interceptor)
     implementation(libs.retrofit)
-    implementation(libs.converter.gson)
 }
