@@ -8,5 +8,6 @@ data class StationDictionaryEntity(
     @PrimaryKey
     val id: Int,
     val keyword: String,
-    val stationId: Int
+    val stationId: Int,
+    val timestamp: Long
 )

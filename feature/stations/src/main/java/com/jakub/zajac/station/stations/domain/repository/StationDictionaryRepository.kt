@@ -5,5 +5,5 @@ import com.jakub.zajac.station.stations.data.remote.model.StationDictionaryDto
 
 interface StationDictionaryRepository {
 
-    suspend fun getStationDictionaryList(): ApiResult<List<StationDictionaryDto>>
+    suspend fun getStationDictionaryList(isRefresh: Boolean = false): ApiResult<List<StationDictionaryDto>>
 }

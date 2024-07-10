@@ -9,4 +9,7 @@ data class StationEntity(
     val id: Int,
     val name: String,
     val hits: Int,
+    val timestamp: Long,
+    val latitude: Float,
+    val longitude: Float,
 )
