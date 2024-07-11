@@ -6,5 +6,5 @@ sealed class HomeEvent {
 }
 
 sealed class HomeNavigationEvent{
-    data class FirstStationSearchClick(val type: String): HomeNavigationEvent()
+    data class StationSearchClick(val type: String): HomeNavigationEvent()
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_sub_title">Wybierz stację początkową oraz docelową, aby obliczyć odegłości pomiedzy nimi</string>
+    <string name="home_app_name">Station App</string>
+    <string name="home_search_source_hint">Wybierz stację początkową</string>
+    <string name="home_search_destination_hint">Wybierz stację końcową</string>
+    <string name="home_station_distance">Odległośc między stacjami wynosi:\n%1$.3f km</string>
+    <string name="home_error_the_same_station">Stacja początkowa oraz końcowa są takie same. \nNie można wyliczyć odległości</string>
+</resources>

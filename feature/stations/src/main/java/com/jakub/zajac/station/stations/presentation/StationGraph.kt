@@ -18,7 +18,7 @@ fun NavGraphBuilder.stationGraph(
     ) {
         homeNavigation(navigationEvent = { navigationEvent ->
             when (navigationEvent) {
-                is HomeNavigationEvent.FirstStationSearchClick -> navController.navigate(
+                is HomeNavigationEvent.StationSearchClick -> navController.navigate(
                     Route.SearchScreenRout(type = navigationEvent.type)
                 )
             }

@@ -10,15 +10,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.jakub.zajac.station.stations.R
 import com.jakub.zajac.station.stations.presentation.home.compnent.SearchComponent
 
 
@@ -35,14 +39,16 @@ fun HomeScreen(
         Column(
             modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Station App")
+            Text(
+                text = stringResource(R.string.home_app_name),
+                style = TextStyle(fontSize = 40.sp, fontFamily = FontFamily.Cursive)
+            )
 
 
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                "Wybierz stację początkową oraz docelową, aby obliczyć odegłości pomiedzy nimi",
-                textAlign = TextAlign.Start
+                stringResource(R.string.home_sub_title), textAlign = TextAlign.Start
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -54,12 +60,16 @@ fun HomeScreen(
                 .background(MaterialTheme.colorScheme.primaryContainer),
 
                 onClickEvent = {
-                    navigationEvent.invoke(HomeNavigationEvent.FirstStationSearchClick("source"))
+                    navigationEvent.invoke(
+                        HomeNavigationEvent.StationSearchClick(
+                            STATION_TYPE_SOURCE
+                        )
+                    )
                 },
                 onClearEvent = {
                     event.invoke(HomeEvent.ClearSourceStationClicked)
                 },
-                defaultHint = "Wybierz stację początkową",
+                defaultHint = stringResource(R.string.home_search_source_hint),
                 currentSearchValue = state.sourceStation?.name
             )
 
@@ -71,19 +81,32 @@ fun HomeScreen(
                 .clip(shape = RoundedCornerShape(25.dp))
                 .background(MaterialTheme.colorScheme.primaryContainer),
                 onClickEvent = {
-                    navigationEvent.invoke(HomeNavigationEvent.FirstStationSearchClick("destination"))
+                    navigationEvent.invoke(
+                        HomeNavigationEvent.StationSearchClick(
+                            STATION_TYPE_DESTINATION
+                        )
+                    )
                 },
                 onClearEvent = {
                     event.invoke(HomeEvent.ClearDestinationStationClicked)
                 },
-                defaultHint = "Wybierz stację końcową",
+                defaultHint = stringResource(R.string.home_search_destination_hint),
                 currentSearchValue = state.destinationStation?.name
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            if (state.distanceBetweenStation > 0) {
-                Text("Odległośc między stacjami wynoski: ${state.distanceBetweenStation} km")
+            if (state.errorTheSameStation) {
+                Text(
+                    stringResource(R.string.home_error_the_same_station),
+                    color = MaterialTheme.colorScheme.error,
+                    textAlign = TextAlign.Center
+                )
+            } else if (state.distanceBetweenStation > 0) {
+                Text(
+                    stringResource(R.string.home_station_distance, state.distanceBetweenStation),
+                    textAlign = TextAlign.Center
+                )
             }
 
         }
