@@ -6,4 +6,10 @@
     <string name="home_search_destination_hint">Wybierz stację końcową</string>
     <string name="home_station_distance">Odległośc między stacjami wynosi:\n%1$.3f km</string>
     <string name="home_error_the_same_station">Stacja początkowa oraz końcowa są takie same. \nNie można wyliczyć odległości</string>
+    <string name="search_title">Wyszukaj stację po nazwie</string>
+    <string name="search_bar_place_holder">Wpisz nazwę stacji</string>
+    <string name="search_refresh_button">Odśwież</string>
+    <string name="search_error_message">Niestety wsytąpił błąd podczas pobierania danych\n%1$s</string>
+    <string name="search_start_typig">Zacznij wpisywać</string>
+    <string name="search_no_result">Brak wyniku dla danej frazy</string>
 </resources>

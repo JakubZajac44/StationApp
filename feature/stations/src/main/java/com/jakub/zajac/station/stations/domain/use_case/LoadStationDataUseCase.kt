@@ -22,8 +22,6 @@ class LoadStationDataUseCase @Inject constructor(
                 val stationListResult = async { getStationListUseCase() }.await()
                 val stationDictionaryListResult =
                     async { getStationDictionaryListUseCase() }.await()
-
-                delay(2000)
                 if (stationListResult is Resource.Success && stationDictionaryListResult is Resource.Success) {
                     emit(
                         Resource.Success(

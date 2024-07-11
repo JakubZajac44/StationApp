@@ -1,28 +1,24 @@
 package com.jakub.zajac.station.stations.presentation.search
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jakub.zajac.station.resource.Resource
-import com.jakub.zajac.station.stations.domain.model.StationModel
+import com.jakub.zajac.station.stations.domain.use_case.FilterStationUseCase
 import com.jakub.zajac.station.stations.domain.use_case.LoadStationDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.text.Normalizer
-
-
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val getStationDataUseCase: LoadStationDataUseCase
+    private val getStationDataUseCase: LoadStationDataUseCase,
+    private val filterStationUseCase: FilterStationUseCase
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<SearchState> = MutableStateFlow(SearchState())
@@ -45,7 +41,11 @@ class SearchViewModel @Inject constructor(
                             searchQuery = event.query, isFiltering = true
                         )
                     }
-                    val filteredList = filterStationList(event.query)
+                    val filteredList = filterStationUseCase(
+                        query = event.query,
+                        stationDictionaryList = state.value.stationDictionaryList,
+                        stationList = state.value.stationList
+                    )
                     _state.update { data ->
                         data.copy(
                             stationListFiltered = filteredList, isFiltering = false
@@ -77,20 +77,6 @@ class SearchViewModel @Inject constructor(
 
     }
 
-    private suspend fun filterStationList(query: String): List<StationModel> {
-        delay(500)
-        return if (query.isBlank()) emptyList()
-        else {
-            val stationDictionaryListFiltered = state.value.stationDictionaryList.filter {
-                it.keyword.removeNonSpacingMarks().contains(
-                    query.removeNonSpacingMarks(), ignoreCase = true
-                )
-            }.map { it.stationId }
-            state.value.stationList.filter { it.id in stationDictionaryListFiltered }
-                .sortedByDescending { it.hits }
-        }
-    }
-
 
     private fun loadData() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -114,7 +100,6 @@ class SearchViewModel @Inject constructor(
                     }
 
                     is Resource.Success -> {
-                        Log.e("Koleo", "Success")
                         _state.update { data ->
                             data.copy(
                                 stationList = result.data.stationModel,
@@ -129,6 +114,4 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    private fun String.removeNonSpacingMarks() =
-        Normalizer.normalize(this, Normalizer.Form.NFD).replace("\\p{Mn}+".toRegex(), "")
 }

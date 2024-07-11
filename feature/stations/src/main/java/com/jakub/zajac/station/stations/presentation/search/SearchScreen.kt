@@ -29,10 +29,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.jakub.zajac.station.resource.ui.dot_progress_bar.ProgressDotIndicator
-import com.jakub.zajac.station.stations.domain.model.StationModel
+import com.jakub.zajac.station.stations.R
+import com.jakub.zajac.station.stations.presentation.search.component.StationItem
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,19 +74,21 @@ fun SearchScreen(
 
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Wyszukaj stację po nazwie",
-                    textAlign = TextAlign.Center
+                    text = stringResource(R.string.search_title),
+                    textAlign = TextAlign.Center,
+                    style = TextStyle(fontSize = 20.sp)
                 )
             }
 
 
-            SearchBar(query = state.searchQuery,
+            SearchBar(
+                query = state.searchQuery,
                 onQueryChange = { query ->
                     event.invoke(SearchEvent.SearchQueryTyped(query))
                 },
                 onSearch = {},
                 placeholder = {
-                    Text(text = "Search movies")
+                    Text(text = stringResource(R.string.search_bar_place_holder))
                 },
                 leadingIcon = {
                     Icon(
@@ -123,7 +129,7 @@ fun SearchScreen(
                             items(items = state.stationListFiltered, key = {
                                 it.id
                             }) { station ->
-                                MovieListItem(movie = station) {
+                                StationItem(station = station) {
                                     navigationEvent.invoke(
                                         SearchNavigationEvent.StationSelected(
                                             stationModel = station, stationType = type
@@ -156,9 +162,12 @@ fun SearchScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             if (state.stationListFiltered.isEmpty() && state.searchQuery.isBlank()) {
-                                Text("Zacznij wpisywać")
+                                Text(stringResource(R.string.search_start_typig))
                             } else if (state.stationListFiltered.isEmpty() && state.searchQuery.isNotBlank()) {
-                                Text("Brak wyniku dla danej frazy")
+                                Text(
+                                    stringResource(R.string.search_no_result),
+                                    color = MaterialTheme.colorScheme.error
+                                )
                             }
                         }
 
@@ -174,19 +183,22 @@ fun SearchScreen(
                 modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
             ) {
 
-                Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "Niestety wsytąpił błąd podczas pobierania danych\n${state.errorMessage}",
-                        textAlign = TextAlign.Center
+                        text = stringResource(R.string.search_error_message, state.errorMessage),
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.error
                     )
-                    
+
                     Spacer(modifier = Modifier.height(10.dp))
 
                     Button(onClick = { event.invoke(SearchEvent.RefreshData) }) {
-
-                        Text(text = "Odśwież")
-
+                        Text(text = stringResource(R.string.search_refresh_button))
                     }
                 }
 
@@ -207,20 +219,4 @@ fun SearchScreen(
 
         }
     }
-}
-
-@Composable
-fun MovieListItem(
-    movie: StationModel, modifier: Modifier = Modifier, stationClickedEvent: () -> Unit
-) {
-    Row(horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable {
-                stationClickedEvent.invoke()
-            }) {
-        Text(text = movie.name)
-        Text(text = movie.hits.toString())
-    }
-
 }
