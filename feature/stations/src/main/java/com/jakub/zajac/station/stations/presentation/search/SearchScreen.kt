@@ -29,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -162,10 +163,11 @@ fun SearchScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             if (state.stationListFiltered.isEmpty() && state.searchQuery.isBlank()) {
-                                Text(stringResource(R.string.search_start_typig))
+                                Text(modifier = Modifier.testTag("start querying"), text = stringResource(R.string.search_start_typig))
                             } else if (state.stationListFiltered.isEmpty() && state.searchQuery.isNotBlank()) {
                                 Text(
-                                    stringResource(R.string.search_no_result),
+                                    modifier = Modifier.testTag("no result"),
+                                    text = stringResource(R.string.search_no_result),
                                     color = MaterialTheme.colorScheme.error
                                 )
                             }
@@ -189,7 +191,7 @@ fun SearchScreen(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().testTag("error message"),
                         text = stringResource(R.string.search_error_message, state.errorMessage),
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.error
@@ -197,7 +199,7 @@ fun SearchScreen(
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    Button(onClick = { event.invoke(SearchEvent.RefreshData) }) {
+                    Button(modifier = Modifier.testTag("refresh button"), onClick = { event.invoke(SearchEvent.RefreshData)}) {
                         Text(text = stringResource(R.string.search_refresh_button))
                     }
                 }
@@ -209,7 +211,7 @@ fun SearchScreen(
 
         if (state.isLoading) {
             Box(
-                modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+                modifier = Modifier.fillMaxSize().testTag("loading progress"), contentAlignment = Alignment.Center
             ) {
                 ProgressDotIndicator(
                     modifier = Modifier.size(80.dp),
